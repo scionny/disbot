@@ -2,15 +2,13 @@ const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: false});
 const config = process.env;
 const messaging = require("./messaging.js");
-const tags = require("./tags");
 const moment = require('moment-timezone');
 
 var prefix = config.prefix;
 
 client.on("ready", () => {
     console.log(`${client.user.username} está preparado!`);
-    client.user.setActivity("use !help to start using me :D");
-    tags.tagSync();    
+    client.user.setActivity("use !help to start using me :D");   
 });
 
 client.on("message", async message => {
@@ -98,18 +96,10 @@ function saveAndSendBossMessage(message, commandArgs, bossName, channelName) {
     const splitArgs = commandArgs.split(' ');
     const raid = bossName;
     const drop = splitArgs.shift();
-    const jewel = splitArgs.shift();            
-    
-    tags.fetchTag(bossName)
-        .then(tag => {
-            if (tag && !tag.isNewRecord) {
-                tags.updateTag(message, raid, drop, jewel)
-                    .then(msg => messaging.sendMessage(client, channelName, msg));
-            } else {
-                tags.createTag(message, raid, drop, jewel)
-                    .then(msg => messaging.sendMessage(client, channelName, msg));        
-            }
-        })
+    const jewel = splitArgs.shift();                
+    const msg = messaging.raidKillMsg(raid, new Date(), drop, jewel);
+    console.log("User " + message.author.username + " sent a boss kill notification: " + msg);
+    messaging.sendMessage(client, channelName, msg);    
 }
 
 function sendScheduledMessage(respawnInHours, message) {
