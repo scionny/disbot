@@ -115,3 +115,10 @@ function saveAndSendBossMessage(message, commandArgs, bossName, channelName) {
 function sendScheduledMessage(respawnInHours, message) {
     messaging.sendScheduledMessage(client,  moment(new Date()).add(respawnInHours, 'h').toDate(), config.notify_channel, `@everyone ${message}`);            
 }
+
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('ok');
+});
+server.listen(3000);
