@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client({disableEveryone: false});
-const config = require("./config.json");
+const config = process.env;
 const messaging = require("./messaging.js");
 const tags = require("./tags");
 const moment = require('moment-timezone');
